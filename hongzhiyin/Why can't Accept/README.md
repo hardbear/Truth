@@ -1,8 +1,11 @@
-# Wrong Answer
+# Why can't Accept
+
+## Wrong Answer
 
 - 【1】 询问区间的边界未初始化或赋值
   - 如：询问了端点 0 ，但之前未对端点 0 赋值
+- 【1】 没注意数据范围，int 溢出
 
-# Runtime Error
+## Runtime Error
 
 - 【1】 树的总结点数超过 N
