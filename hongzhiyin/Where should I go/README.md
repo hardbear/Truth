@@ -6,6 +6,14 @@
 
 - 二项式展开 $$\large (a+b)^n = \sum_{i=0}^{n}C_n^ia^ib^{n-i}$$
 
+## data structures
+
+### 线段覆盖
+
+- 逆向思维，线段覆盖点 转化为 被点与点构成的线段完全覆盖
+
+- 保证右端点被覆盖时，树状数组加入左端点
+
 ## dynamic programming
 
 ### 实现转移方程
