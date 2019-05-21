@@ -9,6 +9,10 @@
 
 ## Thinking
 
+- Where should I go
+
 ## Coding
 
 ## Checking
+
+- Why can't Accept
