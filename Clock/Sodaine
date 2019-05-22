@@ -6,3 +6,125 @@ https://codeforces.com/group/aUVPeyEnI2/contest/243686  H
 time1：--
 time2：5-22 20：40-21:21 
 time3：
+---
+
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> pii;
+typedef vector<int> vi;
+#define de(x) cout << #x << "=" << x << endl
+#define dd(x) cout<< #x<<" = "<<x<<" "
+#define ms(a,b) memset(a,b,sizeof(a))
+#define rep(i,a,b) for(int i=a;i<(b);++i)
+#define per(i,l,r) for(int i=(r)-1;i>=(l);--i)
+#define all(x) (x).begin(),(x).end()
+#define sz(x) (int)(x).size()
+#define mp make_pair
+#define pb push_back
+#define fi first
+#define se second
+#define IO(x) freopen(x".in", "r", stdin); freopen(x".out", "w", stdout);
+#define PI acos(-1.0)
+const int INF = 0x3f3f3f3f;
+const ll LINF = 0x3f3f3f3f3f3f3f3f;
+using namespace std;
+const int N = 5007;
+const int M = -1;
+vi e[N],av[N];
+int match[N],_match[N];
+bool vis[N];
+string s[N];
+vector<string> pre,sub;
+bool dfs(int u) {
+	for(auto v : e[u]) if(!vis[v]) {
+		vis[v] = 1;
+		if(match[v] == -1 || dfs(match[v])) {
+			match[v] = u;
+			return 1;
+		}
+	}
+	return 0;
+}
+int hungary(int n) {
+	memset(match,-1,sizeof(match));
+	int res = 0;
+	rep(i,0,n) {
+		memset(vis,0,sizeof(vis));
+		res += dfs(i);
+	}
+	return res;
+}
+int chose[N];
+int l[N],r[N];
+int main()
+{
+	std::ios::sync_with_stdio(false);
+	std::cin.tie(0);
+	int n,k; cin>>n>>k;
+	rep(i,1,n+1) cin>>s[i];
+	rep(i,1,n+1) {
+		pre.pb(s[i].substr(0,k));
+		sub.pb(s[i].substr(s[i].length()-k,k));
+	}
+	sort(pre.begin(),pre.end());
+	sort(sub.begin(),sub.end());
+	pre.erase(unique(pre.begin(),pre.end()),pre.end());
+	pre.erase(unique(pre.begin(),pre.end()),pre.end());
+	rep(i,1,n+1) {
+		int u = lower_bound(pre.begin(),pre.end(),s[i].substr(0,k)) - pre.begin();
+		int v = lower_bound(sub.begin(),sub.end(),s[i].substr(s[i].length()-k,k)) - sub.begin();
+		l[i] = u,r[i] = v;
+		e[u].pb(v);
+	}
+	int ans = hungary(sz(pre)),m = sz(pre);
+	memset(chose,-1,sizeof(chose));
+	rep(i,0,sz(sub)) {
+		if(match[i] != -1) {
+			chose[i + m] = 0;
+			chose[match[i]] = 0;
+			_match[match[i]] = i;
+		}
+	}
+	int res = ans;
+	while(res) {
+		int f = 0,tu=0;
+		rep(u,0,sz(pre)) {
+			for(auto v:e[u]) {
+				if(chose[u] == -1) {
+					chose[v+m] = 1;
+					if(match[v] != -1) chose[match[v]] = -1;
+					f = 1;
+					res--;
+				}else if(chose[v+m] == -1) {
+					chose[u] = 1;
+					if(_match[u] != -1) chose[_match[u]+m] = -1;
+					f = 1;
+					res--;
+				}else if(chose[u] == 0 && chose[v+m] == 0) {
+					tu = u;
+				}
+			}
+		}
+		if(!f && res) {
+			chose[tu] = 1;
+			chose[_match[tu]+m] = -1;
+		}
+	}
+	rep(i,1,n+1) {
+		if(chose[l[i]] == 1) av[i].pb(l[i]);
+		else av[i].pb(r[i]+m);
+	}
+	printf("%d\n",ans);
+	rep(i,0,m+sz(sub)) {
+		if(sz(av[i])) {
+			cout<<sz(av[i]);
+		}
+		rep(j,0,sz(av[i])) {
+			cout<<' '<<av[i][j];
+		}
+		cout<<endl;
+	}
+	return 0;
+}
+
